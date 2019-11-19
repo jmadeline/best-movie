@@ -4,9 +4,9 @@ class FormMovie extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      movieName: '',
-      movieUrl: '',
-      movieComment: '',
+      title: '',
+      poster: '',
+      comment: '',
     }
   }
 
@@ -18,6 +18,27 @@ class FormMovie extends React.Component {
 
   submitForm = (e) => {
     e.preventDefault();
+    const config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.state),
+    };
+    const url = " https://post-a-form.herokuapp.com/api/movies/";
+    fetch(url, config)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res)
+        if (res.error) {
+          alert(res.error);
+        } else {
+          alert(`Movie ajouté avec l'ID ${res.id}!`);
+        }
+      }).catch(e => {
+        console.error(e);
+        alert(`Erreur lors de l'ajout d'un film`);
+      });
   }
 
   render() {
@@ -29,33 +50,33 @@ class FormMovie extends React.Component {
           <fieldset>
             <legend>Informations</legend>
             <div className="form-data">
-              <label htmlFor="lastname">Nom</label>
+              <label htmlFor="title">Movie</label>
               <input
                 type="text"
-                id="lastname"
-                name="lastname"
+                id="title"
+                name="title"
                 onChange={this.onChange}
                 value={this.state.lastname}
               />
             </div>
 
             <div className="form-data">
-              <label htmlFor="firstname">Prénom</label>
+              <label htmlFor="poster">URL</label>
               <input
                 type="text"
-                id="firstname"
-                name="firstname"
+                id="poster"
+                name="poster"
                 onChange={this.onChange}
                 value={this.state.firstname}
               />
             </div>
 
             <div className="form-data">
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="comment">Comment</label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="textarea"
+                id="comment"
+                name="comment"
                 onChange={this.onChange}
                 value={this.state.email}
               />
